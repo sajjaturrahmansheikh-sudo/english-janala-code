@@ -1,3 +1,10 @@
+function pronounceWord(word) {
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-EN"; // English
+  window.speechSynthesis.speak(utterance);
+}
+
+
 const loadLesson = () => {
     fetch("https://openapi.programming-hero.com/api/levels/all")
         .then(res => res.json())
@@ -8,6 +15,12 @@ const removeActive = () => {
     const lessonButtons = document.querySelectorAll(".lesson-btn");
     lessonButtons.forEach(btn => btn.classList.remove("active"))
 }
+
+const createElement = (arr) => {
+    const htmlElement = arr.map(el => `<span class="btn bg-[#EDF7FF]">${el}</span>`);
+    return htmlElement.join(" ");
+}
+
 
 
 const loadLevelWord = (id) => {
@@ -48,7 +61,7 @@ const loadWordDetail = async (id) => {
 const displayWordDetail = (word) => {
     console.log(word)
     const detailsContainer = document.getElementById("details-container");
-    detailsContainer.innerHTML= `
+    detailsContainer.innerHTML = `
         <div><h3 class="text-3xl font-semibold">${word.word} (<i class="fa-solid fa-microphone-lines"></i>    :${word.pronunciation})</h3></div>
                 <div>              
                     <h4 class="text-[24px] font-semibold">Meaning</h4>
@@ -59,10 +72,8 @@ const displayWordDetail = (word) => {
                     <p class="text-[24px]"> ${word.sentence} </p>
                 </div>
                 <div>
-                    <h4 class="text-[24px] font-semibold">সমার্থক</h4>
-                    <span class="btn">WTF</span>
-                    <span class="btn">WTF</span>
-                    <span class="btn">WTF</span>
+                    <h4 class="text-[24px] font-semibold">সমার্থক শব্দ গুলো</h4>
+                    <div class=""> ${createElement(word.synonyms)} </div>
                 </div>
     
     
@@ -96,7 +107,7 @@ const displayLevelWord = (words) => {
                     <div class="font-bangla text-2xl font-semibold">"${word.meaning ? word.meaning : "অর্থ পাওয়া যায়নি"} / ${word.pronunciation ? word.pronunciation : "উচ্চারণ পাওয়া যায়নি"}"</div>
                     <div class="flex justify-between items-center">
                         <button onclick="loadWordDetail(${word.id})" class="btn bg-[#1A91FF20] hover:bg-[#1A91FF80]"><i class="fa-solid fa-circle-info"></i></button>
-                        <button class="btn bg-[#1A91FF20] hover:bg-[#1A91FF80]"><i class="fa-solid fa-volume-high"></i></button>
+                        <button onclick="pronounceWord('${word.word}')" class="btn bg-[#1A91FF20] hover:bg-[#1A91FF80]"><i class="fa-solid fa-volume-high"></i></button>
                     </div>
             </div>
         
